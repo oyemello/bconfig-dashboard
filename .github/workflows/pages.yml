@@ -34,8 +34,8 @@ jobs:
 
       - name: Build static site
         run: |
+          rm -rf app/api
           NEXT_PUBLIC_PAGES=1 npm run build
-          npx next export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -52,4 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
