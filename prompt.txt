@@ -1,0 +1,57 @@
+Here’s your prompt rewritten in the Cornell-style structure you’ve been using:
+
+⸻
+
+Cue:
+
+Integrating AI — Replacing search bar with AI-powered chat drawer
+
+⸻
+
+Instructions / Comments:
+	•	UI Change:
+	•	Remove the current search bar on top.
+	•	Replace it with a button consisting of:
+	•	An icon:
+	•	Light mode → Open-AI-black-monoblossom.png
+	•	Dark mode → Open-AI-white-monoblossom.png
+	•	Text: “Search with AI”
+	•	Interaction:
+	•	When the user clicks this button, a drawer should slide in from the right, containing a chat window.
+	•	This chat is meant to help users browse Excel sheets and answer their queries by returning:
+	•	Workbook name
+	•	Sheet title
+	•	Label name
+	•	Label description
+	•	The chat should allow back-and-forth conversation to clarify what the user is searching for.
+	•	To narrow results, rely on:
+	•	Screen label
+	•	Additional field description cells — these usually contain the most relevant context.
+	•	If needed, break down the user’s input to better interpret the context.
+	•	Memory:
+	•	The chat should retain context during the session, and only reset if the user refreshes the page.
+	•	Tone:
+	•	The agent’s replies should feel as human as possible.
+	•	Output format:
+After understanding the query, the final answer should be displayed like this:
+
+Here's what you might be looking for:
+Workbook: (Mention which workbook it is in)
+Title: (the name of the sheet)
+Label: (the name of the label)
+Description: (the description of the label)
+
+
+	•	AI Model:
+	•	Use OpenAI API setup.
+	•	Structure it so that the next developer only needs to replace the API key to make it work.
+
+⸻
+
+Summary / Additional Info:
+	•	❌ Do not touch any other parts of the project — everything is already well structured.
+	•	✅ Suggest changes before editing.
+
+⸻
+
+Would you like me to make this sound a bit more casual (like a message to your dev group), or keep it structured and professional like this?
