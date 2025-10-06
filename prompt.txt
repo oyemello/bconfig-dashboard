@@ -56,8 +56,8 @@ Rules:
 - Do not repeat any header per item and add no extra commentary before or after.
 
 	•	AI Model:
-	•	Use OpenAI API setup.
-	•	Structure it so that the next developer only needs to replace the API key to make it work.
+	•	Use the corporate LLM via an E2 token (no API key).
+	•	Default model is `gpt-4.1`; allow overriding via `AI_MODEL`.
 
 ⸻
 

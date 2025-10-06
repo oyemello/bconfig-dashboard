@@ -17,7 +17,7 @@ Project Structure
 - `lib/excel/files.ts` — product→workbook mapping + labels.
 - `lib/excel/parse.ts` — Excel parsing utilities.
 - `app/page.tsx` — main UI (AI drawer + table), data fetch (API in dev, JSON on Pages).
-- `app/api/ai/route.ts` — AI search route (OpenAI Chat Completions).
+- `app/api/ai/route.ts` — AI search route (Chat Completions via E2 token).
 - `scripts/build-data.mjs` — build-time JSON generator for Pages.
 - `.github/workflows/pages.yml` — GitHub Pages workflow.
 
@@ -47,11 +47,11 @@ Runs with live Excel parsing via API routes (and the AI route).
 # Install deps
 npm ci
 
-# Start dev server (requires OPENAI_API_KEY for AI chat)
+# Start dev server (requires AMEX_E2_TOKEN for AI chat)
 npm run dev
 ```
 
-- Data is served by `app/api/index/route.ts`, `app/api/sheet/route.ts`, and `app/api/ai/route.ts` (OpenAI-backed).
+- Data is served by `app/api/index/route.ts`, `app/api/sheet/route.ts`, and `app/api/ai/route.ts` (LLM-backed via E2 token).
 - The UI fetches these endpoints during development.
 
 Static Build for GitHub Pages
@@ -77,7 +77,7 @@ CI (recommended):
 Notes
 - `next.config.mjs` switches to static export and sets `basePath`/`assetPrefix` to `/bconfig-dashboard` only when `NEXT_PUBLIC_PAGES=1`.
 - In static mode, the UI fetches `public/data/*.json` instead of API routes (automatic via `NEXT_PUBLIC_PAGES`).
-- AI chat requires a server environment (or a separate API) to access OpenAI.
+- AI chat requires a server environment (the backend calls the LLM using your E2 token; no OpenAI API key is used).
 
 AI Search
 - Click "Search with AI" to open the chat drawer. Ask for fields or descriptions.
@@ -98,10 +98,10 @@ Troubleshooting
 - If Pages deploy fails with API-related errors, ensure the workflow step that removes `app/api` runs before the Pages build.
 - If static site assets 404 under GitHub Pages, verify `basePath`/`assetPrefix` are `/bconfig-dashboard` (set by `NEXT_PUBLIC_PAGES=1`).
 - After changing Excel files, run the data build step again to regenerate `public/data/*.json`.
-- OpenAI errors:
-  - 401 unauthorized → invalid/expired key.
-  - 404 model not found → set `OPENAI_MODEL=gpt-4o` or `gpt-4o-mini`.
-  - 429 insufficient_quota → fund the account or use a funded key.
+- LLM errors:
+  - 401 unauthorized → invalid/expired E2 token.
+  - 404 model not found → set `AI_MODEL=gpt-4.1` (default) or a supported model.
+  - 429 rate limited → reduce calls or request higher quota.
 
 Scripts
 - `npm run dev` — dev server with APIs (live parsing).
@@ -117,9 +117,8 @@ Maintainer tips
 - To add a new product type, update the union and maps in `lib/excel/files.ts`, the labels/select in `app/page.tsx`, and optionally accent colors.
 - Keep `scripts/build-data.mjs` in sync with `lib/excel/parse.ts` if parsing rules evolve.
 
-OpenAI Setup
+LLM Setup (E2 token)
 - Create `.env.local` with:
-  - `OPENAI_API_KEY=sk-...` (required)
-  - `OPENAI_MODEL=gpt-4o-mini` (optional; defaults to `gpt-4o-mini`)
-  - `OPENAI_ORG=org_...` (optional; if using organizations)
+  - `AMEX_E2_TOKEN=...` (required)
+  - `AI_MODEL=gpt-4.1` (optional; defaults to `gpt-4.1`)
 - Restart `npm run dev` after changes to env vars.

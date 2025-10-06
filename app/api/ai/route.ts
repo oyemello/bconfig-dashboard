@@ -62,8 +62,8 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({})) as { messages?: ChatMessage[]; product?: ProductParam }
     const messages = (body.messages ?? []).filter((m) => m && (m.role === 'user' || m.role === 'assistant')) as ChatMessage[]
     const product = body.product as ProductParam | undefined
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({ error: 'Missing OPENAI_API_KEY' }, { status: 500 })
+    if (!process.env.AMEX_E2_TOKEN) {
+      return NextResponse.json({ error: 'Missing AMEX_E2_TOKEN' }, { status: 500 })
     }
     if (!product || !['BC','CC','CS','ALL'].includes(product)) {
       return NextResponse.json({ error: 'Invalid or missing product' }, { status: 400 })
@@ -183,7 +183,7 @@ Additional constraints:
     const contextMsg = `Top matches (pre-filtered context). Use for reference only. Each item: {workbook, title, label, description, destination}.
 ${top.map((t, i) => `${i + 1}. ${JSON.stringify(t)}`).join('\n')}`
 
-    const model = process.env.OPENAI_MODEL || 'gpt-4o-mini'
+    const model = process.env.AI_MODEL || 'gpt-4.1'
     const payload = {
       model,
       temperature: 0.3,
@@ -198,14 +198,14 @@ ${top.map((t, i) => `${i + 1}. ${JSON.stringify(t)}`).join('\n')}`
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.AMEX_E2_TOKEN}`,
       },
       body: JSON.stringify(payload),
     })
 
     if (!resp.ok) {
       const err = await resp.text().catch(() => '')
-      return NextResponse.json({ error: `OpenAI error: ${resp.status} ${err}` }, { status: 500 })
+      return NextResponse.json({ error: `LLM error: ${resp.status} ${err}` }, { status: 500 })
     }
     const data = await resp.json()
     const content: string = data?.choices?.[0]?.message?.content ?? ''
