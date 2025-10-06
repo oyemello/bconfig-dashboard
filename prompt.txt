@@ -33,14 +33,27 @@ Instructions / Comments:
 	•	Tone:
 	•	The agent’s replies should feel as human as possible.
 	•	Output format:
-After understanding the query, the final answer should be displayed like this:
+	After understanding the query, follow these exact formats:
 
+Single result:
 Here's what you might be looking for:
 Workbook: (Mention which workbook it is in)
 Title: (the name of the sheet)
 Label: (the name of the label)
 Description: (the description of the label)
 
+Multiple results (2 or more):
+I found **X results** that match what you are looking for:
+1. Workbook: (which workbook)
+   Title: (sheet name)
+   Label: (label)
+   Description: (description)
+2. ...
+
+Rules:
+- Bold only the "X results" phrase (e.g., **3 results**), where X is the number of items listed.
+- Use only the provided matches (no invented values), in the provided order, and exclude destination.
+- Do not repeat any header per item and add no extra commentary before or after.
 
 	•	AI Model:
 	•	Use OpenAI API setup.

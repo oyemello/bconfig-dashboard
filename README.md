@@ -83,8 +83,11 @@ AI Search
 - Click "Search with AI" to open the chat drawer. Ask for fields or descriptions.
 - The backend ranks rows giving extra weight to “Screen Label” and “Additional Field Description” columns when present.
 - Use the Scope switch to search the selected product only or all workbooks (BC, CC, CS).
-- When confident, the assistant returns:
-  - "Here's what you might be looking for:\nWorkbook: …\nTitle: …\nLabel: …\nDescription: …"
+- When confident, the assistant returns either:
+  - Single result:
+    "Here's what you might be looking for:\nWorkbook: …\nTitle: …\nLabel: …\nDescription: …"
+  - Multiple results:
+    "I found **X results** that match what you are looking for:\n1. Workbook: …\n   Title: …\n   Label: …\n   Description: …\n2. …"
 
 UI Details
 - Left column: fixed width; vertical scroll only; selected item background `#006fcf` with white text.

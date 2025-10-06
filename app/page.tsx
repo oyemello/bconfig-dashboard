@@ -34,6 +34,18 @@ type SheetData = {
   records: number
 }
 
+// Minimal inline Markdown support for bold (**text**), safe-by-construction (no HTML injection)
+function renderInlineBold(content: string) {
+  const parts = content.split(/(\*\*[^*]+?\*\*)/g)
+  return parts.map((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length >= 4) {
+      const inner = part.slice(2, -2)
+      return <strong key={idx}>{inner}</strong>
+    }
+    return <span key={idx}>{part}</span>
+  })
+}
+
 export default function Dashboard() {
   const [selectedProduct, setSelectedProduct] = useState<ProductType>("BC")
   const [indexItems, setIndexItems] = useState<IndexItem[]>([])
@@ -445,7 +457,7 @@ export default function Dashboard() {
                     m.role === 'assistant' ? '' : 'max-w-[85%]',
                   )}
                 >
-                  {m.content}
+                  {renderInlineBold(m.content)}
                 </div>
               ))}
               <div ref={chatEndRef} />

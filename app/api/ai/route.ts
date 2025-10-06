@@ -153,10 +153,32 @@ export async function POST(req: Request) {
       score: c.score,
     }))
 
-    const systemPrompt = `You are an AI assistant helping a user find fields in Excel configuration workbooks. 
-Ask clarifying questions when needed. When confident, answer strictly in this final format:
-"Here's what you might be looking for:\nWorkbook: (which workbook)\nTitle: (sheet name)\nLabel: (label)\nDescription: (description)".
-If multiple plausible matches exist or ambiguity remains, ask a follow-up question first. Prefer matches where query terms appear in the label or the additional field description.`
+    const systemPrompt = `You are an AI assistant helping a user find fields in Excel configuration workbooks.
+
+Follow these strict rules when responding:
+- If exactly one strong match: respond exactly as:
+Here's what you might be looking for:
+Workbook: (which workbook)
+Title: (sheet name)
+Label: (label)
+Description: (description)
+
+- If two or more plausible matches: respond exactly as:
+I found **N results** that match what you are looking for:
+1. Workbook: (which workbook)
+   Title: (sheet name)
+   Label: (label)
+   Description: (description)
+2. ...
+
+Additional constraints:
+- Replace N with the number of results shown (e.g., 3) and bold only the phrase "N results" (e.g., **3 results**).
+- Use only items present in the "Top matches" context, in the same order; do not invent values.
+- List up to the items provided in context; do not include destination.
+- Remove exact duplicates (same workbook+title+label+description).
+- Do not repeat any header per item; no extra commentary before or after.
+- If zero plausible matches, ask a brief clarifying question instead.
+- Prefer matches where query terms appear in the label or the additional field description.`
 
     const contextMsg = `Top matches (pre-filtered context). Use for reference only. Each item: {workbook, title, label, description, destination}.
 ${top.map((t, i) => `${i + 1}. ${JSON.stringify(t)}`).join('\n')}`
